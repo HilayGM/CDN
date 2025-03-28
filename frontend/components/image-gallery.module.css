@@ -8,12 +8,14 @@
 .gallery h2 {
   margin-bottom: 20px;
   font-size: 1.5rem;
+  text-align: center;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
+  justify-items: center;
 }
 
 .imageCard {
@@ -21,6 +23,8 @@
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
+  cursor: pointer;
+  width: 250px;
 }
 
 .imageCard:hover {
@@ -28,8 +32,22 @@
 }
 
 .imageWrapper {
-  height: 200px;
+  width: 250px;
+  height: 250px;
   overflow: hidden;
+  background-color: #f5f5f5;
+  position: relative;
+}
+
+.imageWrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f0f0f0;
+  z-index: -1;
 }
 
 .image {
@@ -44,42 +62,21 @@
 }
 
 .imageInfo {
-  padding: 15px;
+  padding: 10px;
+  text-align: center;
 }
 
 .imageName {
   font-weight: 500;
-  margin-bottom: 5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 5px;
 }
 
-.imageDate {
+.imageId {
+  font-size: 0.8rem;
   color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-}
-
-.deleteButton {
-  background-color: var(--error-color);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 12px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  width: 100%;
-}
-
-.deleteButton:hover:not(:disabled) {
-  background-color: #e03030;
-}
-
-.deleteButton:disabled {
-  background-color: #ff8080;
-  cursor: not-allowed;
 }
 
 .loading,
@@ -100,7 +97,8 @@
   gap: 15px;
 }
 
-.retryButton {
+.retryButton,
+.reloadButton {
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -109,13 +107,57 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-bottom: 20px;
 }
 
-.retryButton:hover {
+.reloadButton {
+  display: block;
+  margin: 0 auto 20px auto;
+}
+
+.retryButton:hover,
+.reloadButton:hover {
   background-color: #0058c7;
 }
 
 .empty {
   color: #666;
+}
+
+.debugInfo {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  text-align: left;
+  font-size: 0.8rem;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.debugInfo h4 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.debugInfo pre {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.debugDetails {
+  margin-top: 30px;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+.debugDetails summary {
+  cursor: pointer;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.debugDetails summary:hover {
+  color: var(--primary-color);
 }
 

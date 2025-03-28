@@ -9,11 +9,15 @@ export default function ImageUploader() {
   const [file, setFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState({ text: "", type: "" })
+  const [debugInfo, setDebugInfo] = useState<any>(null)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0])
+      const selectedFile = e.target.files[0]
+      console.log("Archivo seleccionado:", selectedFile.name, "tamaño:", selectedFile.size, "tipo:", selectedFile.type)
+      setFile(selectedFile)
       setMessage({ text: "", type: "" })
+      setDebugInfo(null)
     }
   }
 
@@ -21,45 +25,60 @@ export default function ImageUploader() {
     e.preventDefault()
 
     if (!file) {
-      setMessage({ text: "Please select a file first", type: "error" })
+      setMessage({ text: "Por favor selecciona un archivo primero", type: "error" })
       return
     }
 
     setUploading(true)
     setMessage({ text: "", type: "" })
+    setDebugInfo(null)
 
     const formData = new FormData()
     formData.append("file", file)
 
     try {
+      console.log("Enviando archivo al servidor:", file.name)
+
       const response = await fetch("http://localhost:3001/images/upload", {
         method: "POST",
         body: formData,
       })
 
+      console.log("Respuesta del servidor:", response.status)
+      const data = await response.json()
+      console.log("Datos de respuesta:", data)
+
+      // Guardar información de depuración
+      setDebugInfo(data)
+
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.message || "Upload failed")
+        throw new Error(data.error || "Error al subir la imagen")
       }
 
-      const data = await response.json()
-      setMessage({ text: "Image uploaded successfully!", type: "success" })
+      setMessage({ text: "¡Imagen subida con éxito!", type: "success" })
       setFile(null)
 
-      // Trigger a refresh of the image gallery
-      window.dispatchEvent(new CustomEvent("imageUploaded"))
-    } catch (error) {
-      console.error("Error uploading image:", error)
+      // Limpiar el input de archivo
+      const fileInput = document.getElementById("file") as HTMLInputElement
+      if (fileInput) {
+        fileInput.value = ""
+      }
 
-      // Provide more specific error messages
+      // Recargar la página para mostrar la nueva imagen
+      setTimeout(() => {
+        window.location.reload()
+      }, 1500)
+    } catch (error) {
+      console.error("Error al subir imagen:", error)
+
       if (error instanceof TypeError && error.message.includes("Failed to fetch")) {
         setMessage({
-          text: "Cannot connect to the server. Please check if the backend is running on port 3001.",
+          text: "No se puede conectar al servidor. Por favor verifica que el backend esté ejecutándose en el puerto 3001.",
           type: "error",
         })
       } else {
         setMessage({
-          text: `Failed to upload image: ${error instanceof Error ? error.message : "Unknown error"}`,
+          text: `Error al subir imagen: ${error instanceof Error ? error.message : "Error desconocido"}`,
           type: "error",
         })
       }
@@ -70,19 +89,27 @@ export default function ImageUploader() {
 
   return (
     <div className={styles.uploader}>
-      <h2>Upload New Image</h2>
+      <h2>Subir Nueva Imagen</h2>
       <form onSubmit={handleSubmit}>
         <div className={styles.fileInput}>
           <input type="file" id="file" accept="image/*" onChange={handleFileChange} disabled={uploading} />
-          <label htmlFor="file">{file ? file.name : "Choose an image file"}</label>
+          <label htmlFor="file">{file ? file.name : "Selecciona una imagen"}</label>
         </div>
 
         <button type="submit" className={styles.uploadButton} disabled={uploading || !file}>
-          {uploading ? "Uploading..." : "Upload Image"}
+          {uploading ? "Subiendo..." : "Subir Imagen"}
         </button>
       </form>
 
       {message.text && <div className={`${styles.message} ${styles[message.type]}`}>{message.text}</div>}
+
+      {/* Información de depuración */}
+      {debugInfo && (
+        <div className={styles.debugInfo}>
+          <h4>Respuesta del servidor:</h4>
+          <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
+        </div>
+      )}
     </div>
   )
 }

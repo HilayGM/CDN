@@ -9,20 +9,21 @@ export default function TroubleshootingGuide() {
   return (
     <div className={styles.troubleshooting}>
       <button className={styles.toggleButton} onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? "Hide Troubleshooting Guide" : "Show Troubleshooting Guide"}
+        {isOpen ? "Ocultar guía de solución de problemas" : "Mostrar guía de solución de problemas"}
       </button>
 
       {isOpen && (
         <div className={styles.guide}>
-          <h3>Troubleshooting Connection Issues</h3>
+          <h3>Solución de problemas de conexión</h3>
 
           <div className={styles.section}>
-            <h4>Error: Cannot connect to the server</h4>
+            <h4>Error: No se puede conectar al servidor</h4>
             <ol>
-              <li>Make sure your backend server is running on port 3001</li>
-              <li>Check if you have any firewall or antivirus blocking the connection</li>
+              <li>Asegúrate de que tu servidor backend esté ejecutándose en el puerto 3001</li>
+              <li>Verifica si tienes algún firewall o antivirus bloqueando la conexión</li>
               <li>
-                Verify that the server URL in the frontend matches your backend (currently set to http://localhost:3001)
+                Comprueba que la URL del servidor en el frontend coincida con tu backend (actualmente configurado como
+                http://localhost:3001)
               </li>
             </ol>
           </div>
@@ -30,22 +31,36 @@ export default function TroubleshootingGuide() {
           <div className={styles.section}>
             <h4>Error: getaddrinfo ENOTFOUND api.cloudflare.com</h4>
             <ol>
-              <li>Check your internet connection</li>
-              <li>Verify that your DNS settings are correct</li>
-              <li>Try using a different DNS server temporarily</li>
-              <li>If you're behind a proxy or VPN, try disabling it temporarily</li>
-              <li>Check if your hosts file has any entries for api.cloudflare.com</li>
+              <li>Verifica tu conexión a Internet</li>
+              <li>Comprueba que tu configuración DNS sea correcta</li>
+              <li>Intenta usar un servidor DNS diferente temporalmente</li>
+              <li>Si estás detrás de un proxy o VPN, intenta desactivarlo temporalmente</li>
+              <li>Verifica si tu archivo hosts tiene alguna entrada para api.cloudflare.com</li>
             </ol>
           </div>
 
           <div className={styles.section}>
-            <h4>Error: Cloudflare API authentication issues</h4>
+            <h4>Error: Problemas con las imágenes de Cloudflare</h4>
             <ol>
-              <li>Verify that your CLOUDFLARE_TOKEN environment variable is set correctly</li>
-              <li>Check that your CLOUDFLARE_ACCOUNT_ID is correct</li>
-              <li>Ensure your Cloudflare token has the necessary permissions</li>
-              <li>Check if your Cloudflare token has expired</li>
+              <li>Verifica que tu variable de entorno CLOUDFLARE_TOKEN esté configurada correctamente</li>
+              <li>Comprueba que tu CLOUDFLARE_ACCOUNT_ID sea correcto</li>
+              <li>
+                Asegúrate de que tu CLOUDFLARE_ACCOUNT_HASH esté configurado (necesario para las URLs de imágenes)
+              </li>
+              <li>Verifica que tu token de Cloudflare tenga los permisos necesarios</li>
+              <li>Comprueba si tu token de Cloudflare ha expirado</li>
             </ol>
+          </div>
+
+          <div className={styles.section}>
+            <h4>Variables de entorno necesarias</h4>
+            <p>Asegúrate de tener estas variables en tu archivo .env del backend:</p>
+            <pre>
+              CLOUDFLARE_TOKEN=tu_token_aquí CLOUDFLARE_ACCOUNT_ID=tu_account_id_aquí
+              CLOUDFLARE_ACCOUNT_HASH=tu_account_hash_aquí
+            </pre>
+            <p>Y esta variable en tu archivo .env.local del frontend:</p>
+            <pre>NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH=tu_account_hash_aquí</pre>
           </div>
         </div>
       )}

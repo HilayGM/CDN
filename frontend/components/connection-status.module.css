@@ -1,57 +1,60 @@
+.connectionContainer {
+  margin-bottom: 20px;
+}
+
 .status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.checking {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.connected {
+  background-color: #e6f7e6;
+  color: var(--success-color);
+}
+
+.disconnected {
+  background-color: #f8d7da;
+  color: var(--error-color);
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.connected .indicator {
+  background-color: var(--success-color);
+}
+
+.disconnected .indicator {
+  background-color: var(--error-color);
+}
+
+.checking .indicator {
+  background-color: #ccc;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
   }
-  
-  .checking {
-    background-color: #f0f0f0;
-    color: #666;
+  50% {
+    opacity: 1;
   }
-  
-  .connected {
-    background-color: #e6f7e6;
-    color: var(--success-color);
+  100% {
+    opacity: 0.5;
   }
-  
-  .disconnected {
-    background-color: #f8d7da;
-    color: var(--error-color);
-  }
-  
-  .indicator {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }
-  
-  .connected .indicator {
-    background-color: var(--success-color);
-  }
-  
-  .disconnected .indicator {
-    background-color: var(--error-color);
-  }
-  
-  .checking .indicator {
-    background-color: #ccc;
-    animation: pulse 1.5s infinite;
-  }
-  
-  @keyframes pulse {
-    0% {
-      opacity: 0.5;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0.5;
-    }
-  }
-  
-  
+}
+
